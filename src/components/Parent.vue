@@ -2,7 +2,7 @@
     <div id="parent">
         <ChildA />
         <ChildB />
-        <h1>Score</h1>
+        <h1>Score cumulé {{cumulScore}}</h1>
     </div>
 </template>
 
@@ -16,6 +16,11 @@
             ChildA,
             ChildB
         },
+        computed: {
+            cumulScore: function () {
+                return this.$store.getters['cumulBoard/cumulScore']
+            }
+        }
     }
 </script>
 

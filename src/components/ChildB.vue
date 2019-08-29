@@ -1,7 +1,7 @@
 <template>
     <div class="child childB">
         <h1>Result {{result}}</h1>
-        <button v-on:click="changeResult(1000)">Change score</button>
+        <button v-on:click="changeScore(0)">Change score</button>
     </div>
 </template>
 
@@ -11,11 +11,11 @@
     export default {
         name: "ChildB",
         methods: {
-            ...Vuex.mapActions({changeResult: 'increaseResult'})
+            ...Vuex.mapActions({changeScore: 'resultBoard/incrementScore'})
         },
         computed: {
             result: function () {
-                return this.$store.getters.result;
+                return this.$store.getters['resultBoard/score'];
             }
         }
     }

@@ -1,7 +1,7 @@
 <template>
     <div class="child childA">
         <h1>Score {{score}}</h1>
-        <button @click="changeScore()">Change score</button>
+        <button @click="changeScore(0)">Change score</button>
     </div>
 </template>
 
@@ -11,10 +11,12 @@
     export default {
         name: "ChildA",
         methods: {
-            ...Vuex.mapActions({changeScore: 'incrementScore'})
+            ...Vuex.mapActions({changeScore: 'scoreBoard/incrementScore'})
         },
         computed: {
-            ...Vuex.mapGetters(['score']),
+            score: function () {
+                return this.$store.getters['scoreBoard/score'];
+            }
         },
     }
 </script>

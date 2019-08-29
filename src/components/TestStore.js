@@ -5,29 +5,7 @@ Vue.use(Vuex);
 
 
 const childB = {
-    state:{
-        result: 3,
-    },
-    getters:{
-        result(state) {
-            return state.result;
-        }
-    },
-    mutations:{
-        increase(state, step) {
-            state.result += step;
-        }
-    },
-    actions:{
-        increaseResult: ({commit}, delay) => {
-            setTimeout(() => {
-                commit('increase', 6);
-            }, delay);
-        }
-    },
-};
-
-const childA = {
+    namespaced: true,
     state:{
         score: 0,
     },
@@ -44,15 +22,61 @@ const childA = {
     actions:{
         incrementScore: ({commit}, delay) => {
             setTimeout(() => {
-                commit('increment', 3);
+                let step = 6;
+                commit('increment', step);
+                parent.mutations.increaseCumulScore(parent.state, step);
             }, delay);
         }
     },
 };
 
+const childA = {
+    namespaced: true,
+    state:{
+        score: 10,
+    },
+    getters:{
+        score(state) {
+            return state.score;
+        }
+    },
+    mutations:{
+        increment(state, step) {
+            state.score += step;
+        }
+    },
+    actions:{
+        incrementScore: ({commit}, delay) => {
+            setTimeout(() => {
+                let step = 3;
+                commit('increment', step);
+                parent.mutations.increaseCumulScore(parent.state, step);
+            }, delay);
+        }
+    },
+};
+
+const parent = {
+    namespaced: true,
+    state: {
+        cumulScore: childA.state.score + childB.state.score,
+    },
+    getters:{
+        cumulScore(state) {
+            return state.cumulScore
+        }
+    },
+    mutations: {
+        increaseCumulScore(state, score) {
+            state.cumulScore += score;
+        }
+    }
+};
+
 export default new Vuex.Store({
     modules: {
         scoreBoard: childA,
-        resulteBoard: childB
-    }
+        resultBoard: childB,
+        cumulBoard: parent
+    },
 })
